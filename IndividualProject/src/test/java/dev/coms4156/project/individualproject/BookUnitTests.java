@@ -3,9 +3,12 @@ package dev.coms4156.project.individualproject;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import dev.coms4156.project.individualproject.model.Book;
+import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -96,4 +99,40 @@ public class BookUnitTests {
     boolean result = book.deleteCopy();
     assertFalse(result);
   }
+
+  @Test
+  public void checkoutCopy_noCopiesAvailable_returnsNull() {
+    book.deleteCopy();
+    String dueDate = book.checkoutCopy();
+    assertNull(dueDate);
+  }
+
+  @Test
+  public void setReturnDates_notNull_setsList() {
+    ArrayList<String> dates = new ArrayList<>();
+    dates.add("2025-12-31");
+    book.setReturnDates(dates);
+    assertEquals(dates, book.getReturnDates());
+  }
+
+  @Test
+  public void setReturnDates_withNull_setsEmptyList() {
+    book.setReturnDates(null);
+    assertNotNull(book.getReturnDates());
+    assertTrue(book.getReturnDates().isEmpty());
+  }
+
+  @Test
+  public void hasMultipleAuthors_singleAuthor_returnsFalse() {
+    book.getAuthors().add("Author One");
+    assertFalse(book.hasMultipleAuthors());
+  }
+
+  @Test
+  public void hasMultipleAuthors_multipleAuthors_returnsTrue() {
+    book.getAuthors().add("Author One");
+    book.getAuthors().add("Author Two");
+    assertTrue(book.hasMultipleAuthors());
+  }
+
 }

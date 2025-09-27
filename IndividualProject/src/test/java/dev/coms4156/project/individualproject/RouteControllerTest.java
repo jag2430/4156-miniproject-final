@@ -33,6 +33,32 @@ public class RouteControllerTest {
   }
 
   @Test
+  public void getBook_bookFound_returns200() {
+    Book book = new Book("Test Book", 1);
+    ArrayList<Book> books = new ArrayList<>();
+    books.add(book);
+    when(mockApiService.getBooks()).thenReturn(books);
+
+    ResponseEntity<?> response = routeController.getBook(1);
+
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertEquals(book, response.getBody());
+  }
+
+  @Test
+  public void getBook_bookNotFound_returns404() {
+    Book book = new Book("Test Book", 1);
+    ArrayList<Book> books = new ArrayList<>();
+    books.add(book);
+    when(mockApiService.getBooks()).thenReturn(books);
+
+    ResponseEntity<?> response = routeController.getBook(2);
+
+    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    assertEquals("Book not found.", response.getBody());
+  }
+
+  @Test
   public void getAvailableBooks_bookHasCopies_returns200() {
     Book book = new Book("Test Book", 1);
     ArrayList<Book> books = new ArrayList<>();
